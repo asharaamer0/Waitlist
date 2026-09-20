@@ -1,0 +1,43 @@
+# Quill
+
+> The note that writes itself from your voice.
+
+Quill is a mobile AI note-taking app (currently in closed beta) for people who
+think out loud: students, researchers, writers, and professionals. Speak
+freely and Quill titles, structures and remembers, turning a few minutes of
+rambling into a clean note with flashcards for review.
+
+## What Quill does
+
+- Voice capture: record yourself talking. Quill transcribes, structures, and
+  titles the note. No editing required.
+- Text capture: type, paste, or drop in raw text, meeting notes, or a URL.
+  Quill returns a clean, searchable note in seconds.
+- Document import: upload PDFs. Quill extracts the key ideas and turns them
+  into notes and flashcards.
+- Built-in recall: every note becomes flashcards automatically. No separate
+  study step.
+
+## How it works
+
+1. Capture: speak, type, or upload. However a thought arrives, Quill accepts
+   it without friction.
+2. Curate: Quill structures the input into a clean, titled note with a summary
+   and key points. This usually takes 10 to 30 seconds.
+3. Study: flashcards are generated as you go. Review is built in, not bolted on.
+
+## Status and access
+
+- Quill is in closed beta. Early access is now open via the waitlist.
+- Joining the waitlist asks for full name, email, role, and an explicit
+  consent checkbox. Details are used for early access contact only. No spam.
+- Contact: helloasharaamer@gmail.com
+- Privacy policy: #privacy on the homepage.
+
+## Links
+
+- Features: #features
+- Process: #process
+- Preview: #preview
+- Early access: #waitlist
+- Privacy policy: #privacy

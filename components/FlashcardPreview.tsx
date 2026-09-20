@@ -5,12 +5,24 @@ import { motion } from "framer-motion";
 import { Layers, RotateCw } from "lucide-react";
 
 const cards = [
-  { q: "What is spaced repetition?", a: "A learning technique that schedules reviews just before you forget." },
-  { q: "Why does Quill title notes?", a: "So every capture is searchable, scannable, and easy to revisit." },
-  { q: "Where do flashcards come from?", a: "Generated automatically from your notes as you capture." },
+  {
+    q: "What were the three main themes from the product roadmap discussion?",
+    a: ["1. Search architecture overhaul", "2. Onboarding friction at step 3", "3. Q4 roadmap structure and review cadence"],
+    note: "Product roadmap discussion",
+  },
+  {
+    q: "What is the search latency target from the planning session?",
+    a: ["Under 200ms", "Reviewed positively in the new IA proposal"],
+    note: "Weekly planning session",
+  },
+  {
+    q: "When is the export draft due?",
+    a: ["Thursday", "Part of the weekly reflection workflow"],
+    note: "Weekly planning session",
+  },
 ];
 
-const ADVANCE_MS = 5200;
+const ADVANCE_MS = 8000;
 
 export function FlashcardPreview() {
   const [index, setIndex] = useState(0);
@@ -53,8 +65,17 @@ export function FlashcardPreview() {
             Quill builds your deck as you go.
           </h2>
           <p className="flashcard-sub">
-            No separate study step — every note becomes material for review. Tap to flip, or let the deck breathe on its own.
+            Every note becomes a question. No separate study step — it just happens.
           </p>
+          {/* IMAGE NEEDED: Notes List / Home screen — 280×560px — left column on desktop, flashcard on the right */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/images/mockup-home-angled.png"
+            alt="Quill home screen showing the notes list on three phones"
+            width={1534}
+            height={1025}
+            loading="lazy"
+          />
         </motion.div>
 
         <motion.div
@@ -82,17 +103,27 @@ export function FlashcardPreview() {
           >
             <div className="flashcard-inner">
               <div className="flashcard-face">
-                <small>Question · {index + 1} / {cards.length}</small>
-                {card.q}
+                <small>
+                  Question · {index + 1} / {cards.length}
+                </small>
+                <p className="flashcard-question">{card.q}</p>
+                <span className="flashcard-tap">Tap to reveal answer</span>
               </div>
               <div className="flashcard-face flashcard-back">
-                <small>Answer</small>
-                {card.a}
+                <small>
+                  Answer · {index + 1} / {cards.length}
+                </small>
+                <ul className="flashcard-answer">
+                  {card.a.map((line) => (
+                    <li key={line}>{line}</li>
+                  ))}
+                </ul>
+                <span className="flashcard-note">Note: {card.note}</span>
               </div>
             </div>
           </div>
           <p className="flashcard-hint" aria-hidden="true">
-            <RotateCw /> Tap to flip · auto-advances
+            <RotateCw /> Tap to flip · auto-advances every 8 seconds
           </p>
           <div className="flashcard-dots" aria-hidden="true">
             {cards.map((_, i) => (
@@ -100,7 +131,7 @@ export function FlashcardPreview() {
             ))}
           </div>
           <p className="sr-only" aria-live="polite">
-            Card {index + 1} of {cards.length}: {flipped ? card.a : card.q}
+            Card {index + 1} of {cards.length}: {flipped ? card.a.join(" ") : card.q}
           </p>
         </motion.div>
       </div>

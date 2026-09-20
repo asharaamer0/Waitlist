@@ -1,8 +1,8 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, BellRing, Check, Loader2, Lock, Users, Zap } from "lucide-react";
+import { ArrowRight, Check, Loader2, Lock, Mic } from "lucide-react";
 
 const roles = [
   "Student",
@@ -47,6 +47,25 @@ export function WaitlistForm() {
   const [errors, setErrors] = useState<Errors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
+
+  // Hero email handoff: the hero capture carries the typed email down to this form.
+  useEffect(() => {
+    const readStored = () => {
+      try {
+        const stored = sessionStorage.getItem("quill-hero-email");
+        if (stored) setEmail(stored);
+      } catch {
+        /* session storage unavailable */
+      }
+    };
+    readStored();
+    const onHeroEmail = (event: Event) => {
+      const value = (event as CustomEvent<string>).detail;
+      if (typeof value === "string" && value) setEmail(value);
+    };
+    window.addEventListener("quill:hero-email", onHeroEmail);
+    return () => window.removeEventListener("quill:hero-email", onHeroEmail);
+  }, []);
 
   const validate = (field: FieldName) => {
     const value = field === "name" ? name : email;
@@ -119,39 +138,26 @@ export function WaitlistForm() {
               Get in early.
             </h2>
             <p className="section-intro">
-              Quill is in closed beta. Join the waitlist and be among the first to capture at the speed of
-              thought.
+              Quill is in closed beta. Join the waitlist and be among the first to capture at the
+              speed of thought.
             </p>
           </div>
 
-          <div className="waitlist-aside-card">
-            <div className="waitlist-stat">
-              <span className="waitlist-stat-icon">
-                <Zap aria-hidden="true" />
-              </span>
-              <div>
-                <strong>Seconds, not hours</strong>
-                <span>Voice to structured note, automatically.</span>
+          <div className="waitlist-mini-note">
+            <article className="note-card" aria-label="Teaser of a Quill note you will get">
+              <div className="note-eyebrow">
+                <span className="note-source">
+                  <Mic aria-hidden="true" /> Voice · 3 min
+                </span>
+                <span className="note-time">2h ago</span>
               </div>
-            </div>
-            <div className="waitlist-stat">
-              <span className="waitlist-stat-icon">
-                <Users aria-hidden="true" />
-              </span>
-              <div>
-                <strong>Built for thinkers</strong>
-                <span>Students, researchers, writers, teams.</span>
+              <div className="note-card-body">
+                <h3 className="note-title">Product roadmap discussion</h3>
+                <p className="note-copy">
+                  Key themes included user onboarding friction and the new search arch…
+                </p>
               </div>
-            </div>
-            <div className="waitlist-stat">
-              <span className="waitlist-stat-icon">
-                <BellRing aria-hidden="true" />
-              </span>
-              <div>
-                <strong>First in line</strong>
-                <span>Early members shape the roadmap.</span>
-              </div>
-            </div>
+            </article>
           </div>
         </motion.div>
 
@@ -187,15 +193,7 @@ export function WaitlistForm() {
             </motion.svg>
             <h3 className="success-title">You&apos;re on the list.</h3>
             <p className="success-copy">
-              We&apos;ll reach out as soon as early access opens. Keep thinking out loud — Quill will handle
-              the rest.
-            </p>
-            <p className="success-copy" style={{ marginTop: 10, fontSize: "13.5px", opacity: 0.85 }}>
-              A welcome email is on its way. Questions? Write us at{" "}
-              <a href="mailto:helloasharaamer@gmail.com" style={{ color: "var(--color-accent)", fontWeight: 600 }}>
-                helloasharaamer@gmail.com
-              </a>
-              .
+              We&apos;ll reach out when early access opens. No spam, ever.
             </p>
           </motion.div>
         ) : (
@@ -218,7 +216,7 @@ export function WaitlistForm() {
                 name="name"
                 type="text"
                 autoComplete="name"
-                placeholder="Your full name"
+                placeholder="Ada Lovelace"
                 value={name}
                 onChange={(event) => setName(event.target.value)}
                 onBlur={() => validate("name")}
@@ -243,7 +241,7 @@ export function WaitlistForm() {
                 name="email"
                 type="email"
                 autoComplete="email"
-                placeholder="your@email.com"
+                placeholder="ada@email.com"
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
                 onBlur={() => validate("email")}
@@ -264,18 +262,17 @@ export function WaitlistForm() {
                 {roles.map((role) => {
                   const active = selectedRoles.includes(role);
                   return (
-                    <motion.button
+                    <button
                       className="option-pill"
                       type="button"
                       key={role}
                       aria-pressed={active}
                       onClick={() => toggleRole(role)}
                       onBlur={() => validate("roles")}
-                      whileTap={{ scale: 0.94 }}
                     >
                       {active && <Check aria-hidden="true" />}
                       {role}
-                    </motion.button>
+                    </button>
                   );
                 })}
               </div>
@@ -292,17 +289,16 @@ export function WaitlistForm() {
               </legend>
               <div className="pill-group">
                 {sources.map((item) => (
-                  <motion.button
+                  <button
                     className="option-pill"
                     type="button"
                     key={item}
                     aria-pressed={source === item}
                     onClick={() => setSource((current) => (current === item ? "" : item))}
-                    whileTap={{ scale: 0.94 }}
                   >
                     {source === item && <Check aria-hidden="true" />}
                     {item}
-                  </motion.button>
+                  </button>
                 ))}
               </div>
             </fieldset>
@@ -348,13 +344,7 @@ export function WaitlistForm() {
                 </p>
               )}
             </div>
-            <motion.button
-              className="button button-primary form-submit"
-              type="submit"
-              disabled={isSubmitting}
-              whileHover={isSubmitting ? undefined : { y: -2 }}
-              whileTap={isSubmitting ? undefined : { scale: 0.98 }}
-            >
+            <button className="button button-primary form-submit" type="submit" disabled={isSubmitting}>
               {isSubmitting ? (
                 <>
                   <Loader2 className="button-icon spin" aria-hidden="true" /> Joining the waitlist…
@@ -364,7 +354,7 @@ export function WaitlistForm() {
                   Join the waitlist <ArrowRight className="button-icon" aria-hidden="true" />
                 </>
               )}
-            </motion.button>
+            </button>
             <p className="form-privacy">
               <Lock aria-hidden="true" /> No spam. Early access only. Read our{" "}
               <a href="#privacy">privacy policy</a> · <a href="mailto:helloasharaamer@gmail.com">helloasharaamer@gmail.com</a>

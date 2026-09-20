@@ -15,34 +15,19 @@ export function Footer() {
               />
               <span className="footer-wordmark">Quill</span>
             </div>
-            <p className="footer-copy">Capture at the speed of thought. AI note-taking for how you actually think.</p>
-            <a className="footer-email" href="mailto:helloasharaamer@gmail.com">
-              helloasharaamer@gmail.com
-            </a>
+            <p className="footer-tagline">Capture at the speed of thought.</p>
           </div>
           <nav className="footer-nav" aria-label="Footer">
-            <div className="footer-col">
-              <strong>Product</strong>
-              <a href="#features">Features</a>
-              <a href="#process">Process</a>
-              <a href="#preview">Preview</a>
-            </div>
-            <div className="footer-col">
-              <strong>Access</strong>
-              <a href="#waitlist">Join waitlist</a>
-              <a href="#privacy">Privacy policy</a>
-              <a href="mailto:helloasharaamer@gmail.com">Contact</a>
-            </div>
-            <div className="footer-col">
-              <strong>Contact</strong>
-              <a href="mailto:helloasharaamer@gmail.com">helloasharaamer@gmail.com</a>
-              <span style={{ opacity: 0.6, fontSize: "12.5px" }}>We reply within a day.</span>
-            </div>
+            <a href="#features">Features</a>
+            <a href="#process">Process</a>
+            <a href="#preview">Preview</a>
+            <a href="#waitlist">Early access</a>
+            <a href="#privacy">Privacy policy</a>
           </nav>
         </div>
         <div className="footer-bottom">
-          <p className="footer-copy">Voice · Text · PDFs · Flashcards — one quiet place.</p>
-          <p className="footer-rights">© 2026 Quill · <a href="mailto:helloasharaamer@gmail.com">helloasharaamer@gmail.com</a> · All rights reserved.</p>
+          <p className="footer-legal">© 2026 Quill. All rights reserved.</p>
+          <a href="mailto:helloasharaamer@gmail.com">helloasharaamer@gmail.com</a>
         </div>
       </div>
     </footer>

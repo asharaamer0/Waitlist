@@ -5,22 +5,22 @@ import { GraduationCap, Mic, WandSparkles } from "lucide-react";
 
 const steps = [
   {
-    number: "01",
+    number: "01 Capture",
     icon: Mic,
     title: "Capture",
     copy: "Speak, type, or upload — however a thought arrives, Quill accepts it without friction.",
   },
   {
-    number: "02",
+    number: "02 Curate",
     icon: WandSparkles,
     title: "Curate",
-    copy: "Quill structures your input into a clean, titled note with a summary and key points.",
+    copy: "Quill structures your input into a clean, titled note with summary and key points.",
   },
   {
-    number: "03",
+    number: "03 Study",
     icon: GraduationCap,
     title: "Study",
-    copy: "Flashcards are generated automatically so reviewing and retaining is built in.",
+    copy: "Flashcards are generated as you go — review is built in, not bolted on.",
   },
 ];
 
@@ -37,12 +37,20 @@ export function HowItWorks() {
         >
           <p className="section-label">The process</p>
           <h2 className="section-title" id="process-title">
-            Three steps. Zero effort.
+            Raw thought to retained knowledge.
           </h2>
           <p className="section-intro">
-            A quiet pipeline from raw thought to retained knowledge. No dashboards, no busywork.
+            No dashboards, no busywork. Just three moments — and then it&apos;s done.
           </p>
         </motion.div>
+
+        <div className="steps-rail" aria-hidden="true">
+          <span className="rail-number">01 Capture</span>
+          <span className="rail-line" />
+          <span className="rail-number">02 Curate</span>
+          <span className="rail-line" />
+          <span className="rail-number">03 Study</span>
+        </div>
 
         <div className="steps-grid">
           {steps.map((step, i) => {
@@ -56,25 +64,23 @@ export function HowItWorks() {
                 viewport={{ once: true, margin: "-60px" }}
                 transition={{ duration: 0.45, delay: i * 0.05, ease: [0.16, 1, 0.3, 1] }}
               >
-                <div className="step-top">
-                  <p className="step-number" aria-hidden="true">
-                    {step.number}
-                  </p>
-                  <motion.span
-                    className="step-badge"
-                    initial={{ scale: 0.96, opacity: 0 }}
-                    whileInView={{ scale: 1, opacity: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.4, delay: 0.12 + i * 0.05, ease: [0.16, 1, 0.3, 1] }}
-                  >
-                    <Icon aria-hidden="true" />
-                  </motion.span>
-                </div>
+                <p className="step-number">{step.number}</p>
+                <span className="step-badge">
+                  <Icon aria-hidden="true" />
+                </span>
                 <h3 className="step-title">{step.title}</h3>
                 <p className="step-copy">{step.copy}</p>
               </motion.article>
             );
           })}
+        </div>
+
+        {/* IMAGE NEEDED: Processing screen (waveform collapsing into spinner) — 240×480px — placed between steps 01 and 02 as visual proof */}
+        <div
+          className="mockup-placeholder"
+          style={{ width: 240, height: 480, borderRadius: 24, margin: "40px auto 0", display: "none" }}
+        >
+          <p>Processing screen mockup</p>
         </div>
       </div>
     </section>
