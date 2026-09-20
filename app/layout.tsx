@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 
-// Production domain. Override with NEXT_PUBLIC_SITE_URL if needed.
+// Production domain — override with NEXT_PUBLIC_SITE_URL if needed.
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://quill.asharaamer.dev";
 
 const TITLE = "Quill — The note that writes itself from your voice";
