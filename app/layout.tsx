@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
 
-// TODO: replace with the production domain (or set NEXT_PUBLIC_SITE_URL).
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://quillnotes.app";
+// Production domain. Override with NEXT_PUBLIC_SITE_URL if needed.
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://quill.asharaamer.dev";
 
 const TITLE = "Quill — The note that writes itself from your voice";
 const DESCRIPTION =

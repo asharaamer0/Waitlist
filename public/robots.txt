@@ -14,5 +14,4 @@ Allow: /
 User-agent: Google-Extended
 Allow: /
 
-# TODO: replace quillnotes.app with the production domain.
-Sitemap: https://quillnotes.app/sitemap.xml
+Sitemap: https://quill.asharaamer.dev/sitemap.xml
