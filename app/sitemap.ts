@@ -11,6 +11,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly",
       priority: 1,
     },
-    { url: `${SITE_URL}/privacy`, lastModified: new Date("2026-10-02"), changeFrequency: "monthly", priority: 0.3 },
+    ...["privacy", "terms", "community", "support"].map(path => ({ url: `${SITE_URL}/${path}`, lastModified: new Date("2026-10-04"), changeFrequency: "monthly" as const, priority: 0.3 })),
   ];
 }

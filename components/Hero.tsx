@@ -1,5 +1,5 @@
 import { ArrowDown, ArrowUpRight, CornerDownRight } from "lucide-react";
-import { WaitlistForm } from "./WaitlistForm";
+import { DownloadLink } from "./DownloadLink";
 import { HeroThought } from "./HeroThought";
 
 export function Hero() {
@@ -9,8 +9,8 @@ export function Hero() {
       <div className="hero-copy">
         <h1 className="hero-title hero-enter" id="hero-title">Go off on<br /><em>a tangent.</em></h1>
         <div className="hero-explanation hero-enter"><CornerDownRight className="hero-margin-mark" size={28} aria-hidden="true" /><div><p className="hero-promise">We’ll keep the thread.</p><p className="hero-sub">Talk it through. Quill finds the key ideas, puts them in order, and makes flashcards for the parts you want to remember.</p></div></div>
-        <div className="hero-form-wrap hero-enter"><WaitlistForm id="hero" /></div>
-        <p className="hero-platforms hero-enter"><span className="status-dot" /> Closed beta · iOS & Android</p>
+        <div className="hero-form-wrap hero-enter"><DownloadLink /></div>
+        <p className="hero-platforms hero-enter"><span className="status-dot" /> iPhone & iPad · For adults 18+</p>
       </div>
       <HeroThought />
     </div>

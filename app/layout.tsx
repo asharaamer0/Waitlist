@@ -13,9 +13,9 @@ const body = localFont({ src: "./fonts/dm-sans.woff2", weight: "100 1000", varia
 // Production domain — override with NEXT_PUBLIC_SITE_URL if needed.
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://quill.asharaamer.dev";
 
-const TITLE = "Quill | Turn your voice into clear notes";
+const TITLE = "Quill | Notes, flashcards and focused study for iOS";
 const DESCRIPTION =
-  "Quill is a mobile AI note-taking app. Speak freely and Quill titles, structures and remembers, turning minutes of rambling into a clean note with flashcards. Join the waitlist for early access.";
+  "Quill turns voice, text, PDFs and captioned videos into clear notes. Study saved flashcards, review your recall, get focused study tips and export notes as PDF on iPhone and iPad.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     "meeting notes AI",
     "Quill",
   ],
-  authors: [{ name: "Quill" }],
+  authors: [{ name: "Ashar Aamer" }],
   creator: "Quill",
   robots: {
     index: true,
@@ -81,7 +81,7 @@ const JSON_LD = {
       "@type": "SoftwareApplication",
       name: "Quill",
       applicationCategory: "ProductivityApplication",
-      operatingSystem: ["iOS", "Android"],
+      operatingSystem: "iOS",
       description: DESCRIPTION,
       url: SITE_URL,
     },

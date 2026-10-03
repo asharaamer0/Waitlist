@@ -519,3 +519,17 @@ html.lenis, html.lenis body { height: auto; }
 .final-grid > div:first-child { padding-top: 10px; }
 @media (min-width: 1101px) { .signup-identity { grid-template-columns: 1fr 1fr; gap: 14px; } }
 @media (max-width: 700px) { .full-consent { font-size: 12px; } .full-submit { width: 100%; } }
+
+/* Product launch and legal pages */
+.download-button { display: inline-flex; align-items: center; justify-content: center; gap: 20px; min-height: 52px; padding: 14px 24px; border-radius: 4px; color: var(--color-white); background: var(--color-accent); font-size: 14px; font-weight: 500; }
+.download-pending p { margin-top: 12px; color: var(--color-muted); font-size: 12px; max-width: 340px; }
+.download-button[aria-disabled] { background: transparent; border: 1px solid var(--hairline); color: var(--color-accent); }
+.final-signup .download-pending, .final-signup > .download-button { margin-top: 24px; }
+.download-support { margin-top: 20px; }
+.download-support a, .privacy-page article a { text-decoration: underline; text-underline-offset: 4px; overflow-wrap: anywhere; }
+.privacy-page article p { margin-top: 20px; color: var(--color-muted); }
+.privacy-page article h1 { font-size: clamp(38px, 6vw, 60px); }
+.privacy-page article h2 { font-size: 26px; margin-top: 36px; }
+.privacy-page article footer { margin-top: 40px; font-size: 12px; }
+.footer-links { flex-wrap: wrap; }
+@media (max-width: 650px) { .footer { flex-wrap: wrap; gap: 20px; } .footer-links { width: 100%; gap: 16px; } }

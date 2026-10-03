@@ -12,7 +12,7 @@ export function Nav() {
       <span className="nav-note">A quiet place for a busy mind.</span>
       <div className="nav-links">
         <a className="product-link" href="/#product">Meet Quill</a>
-        <a className="nav-join" href="/#waitlist">Join the waitlist <ArrowUpRight size={16} aria-hidden="true" /></a>
+        <a className="nav-join" href="/#download">Get Quill <ArrowUpRight size={16} aria-hidden="true" /></a>
       </div>
     </nav>
   </header>;

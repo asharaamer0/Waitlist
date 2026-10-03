@@ -4,25 +4,21 @@ import { FlashcardPreview } from "../components/FlashcardPreview";
 import { ProductDemo } from "../components/ProductDemo";
 import { Motion } from "../components/Motion";
 import { Nav } from "../components/Nav";
-import { WaitlistForm } from "../components/WaitlistForm";
-import { waitlistMode } from "../lib/waitlist-config";
+import { DownloadLink } from "../components/DownloadLink";
 
-export const dynamic = "force-dynamic";
 
 export default function Home() {
-  const demo = waitlistMode() === "local";
   return <>
     <Nav />
-    {demo && <div className="demo-banner" role="note">Local preview · signups are saved on this computer. No invitation emails are sent.</div>}
     <Motion>
       <main id="main">
         <Hero />
         <ProductDemo />
         <FlashcardPreview />
-        <section className="final-section" id="waitlist" aria-labelledby="waitlist-title">
+        <section className="final-section" id="download" aria-labelledby="download-title">
           <div className="shell final-grid">
-            <div><p className="eyebrow"><span className="status-dot" /> A little less to remember</p><h2 id="waitlist-title">Your next thought<br /><em>deserves a home.</em></h2></div>
-            <div className="final-signup"><p>Quill is in closed beta.<br />Tell us a little about yourself. We’ll be in touch when your invitation is ready.</p><WaitlistForm /></div>
+            <div><p className="eyebrow"><span className="status-dot" /> A little less to remember</p><h2 id="download-title">Your next thought<br /><em>deserves a home.</em></h2></div>
+            <div className="final-signup"><p>Capture a thought. Study what matters. Export a note as PDF whenever you need it.</p><DownloadLink /><p className="download-support">Need a hand? <a href="/support">Quill support →</a></p></div>
           </div>
         </section>
       </main>

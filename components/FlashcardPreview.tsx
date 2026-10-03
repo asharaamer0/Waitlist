@@ -21,8 +21,8 @@ export function FlashcardPreview() {
     <div className="recall-copy">
       <p className="eyebrow"><span className="section-number">02 /</span> Built-in recall</p>
       <h2 id="recall-title">Don’t just save it.<br /><em>Keep it with you.</em></h2>
-      <p>That paper you read. That lecture you recorded. Quill turns the key ideas into flashcards, so the useful bits stay with you.</p>
-      <a className="text-link" href="#waitlist">Make room for what matters <ArrowRight size={17} aria-hidden="true" /></a>
+      <p>That paper you read. That lecture you recorded. Quill turns the key ideas into saved flashcards. Reveal each answer, rate your recall, and get short study tips based on what needs another look.</p>
+      <a className="text-link" href="#download">Make room for what matters <ArrowRight size={17} aria-hidden="true" /></a>
     </div>
   </section>;
 }
