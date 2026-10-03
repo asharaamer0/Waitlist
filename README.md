@@ -48,7 +48,7 @@ The hero uses a single real device screen from the supplied grid image, presente
 
 The social sharing image uses the same typography and real app screens. Regenerate it with `node scripts/build-og.mjs` after changing the brand or product image.
 
-Development uses `.next`; production builds use `.next-production` so simultaneous previews cannot overwrite each other. WebKit verification requires `npx playwright install webkit`. The actual unconfigured-endpoint check runs against a separate server with Google credentials cleared, using `node scripts/unconfigured-check.mjs`; it never sends an external signup.
+Development uses `.next-dev`; production builds use the standard `.next` directory, which Vercel expects. Simultaneous local development and production previews cannot overwrite each other's manifests. Use the Next.js framework preset and leave Vercel's Output Directory override disabled. WebKit verification requires `npx playwright install webkit`. The actual unconfigured-endpoint check runs against a separate server with Google credentials cleared, using `node scripts/unconfigured-check.mjs`; it never sends an external signup.
 
 ## Review
 
