@@ -1,95 +1,19 @@
-"use client";
-
-import { FormEvent, useState } from "react";
-
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+import { ArrowDown, ArrowUpRight, CornerDownRight } from "lucide-react";
+import { WaitlistForm } from "./WaitlistForm";
+import { HeroThought } from "./HeroThought";
 
 export function Hero() {
-  const [heroEmail, setHeroEmail] = useState("");
-  const [heroError, setHeroError] = useState<string | undefined>();
-
-  function handleHeroSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const value = heroEmail.trim();
-    if (!EMAIL_RE.test(value)) {
-      setHeroError("Please enter a valid email address.");
-      return;
-    }
-    setHeroError(undefined);
-    try {
-      sessionStorage.setItem("quill-hero-email", value);
-    } catch {
-      /* session storage unavailable — the handoff event below still carries the email */
-    }
-    window.dispatchEvent(new CustomEvent("quill:hero-email", { detail: value }));
-    document.getElementById("waitlist")?.scrollIntoView({ behavior: "smooth" });
-  }
-
-  return (
-    <section className="hero" id="top" aria-labelledby="hero-title">
-      <div className="hero-inner">
-        <div className="hero-copy">
-          <h1 className="hero-title" id="hero-title">
-            The note that writes itself from your voice.
-          </h1>
-          <p className="hero-sub">
-            Speak freely. Quill titles, structures and remembers, turning a few minutes of rambling
-            into a clean note.
-          </p>
-          <form className="hero-cta" noValidate onSubmit={handleHeroSubmit}>
-            <label className="sr-only" htmlFor="hero-email">
-              Email
-            </label>
-            <input
-              className="text-input"
-              id="hero-email"
-              name="email"
-              type="email"
-              autoComplete="email"
-              placeholder="ada@email.com"
-              value={heroEmail}
-              onChange={(event) => setHeroEmail(event.target.value)}
-              aria-invalid={Boolean(heroError)}
-              aria-describedby={heroError ? "hero-email-error" : undefined}
-            />
-            <button className="button button-primary" type="submit">
-              Join the waitlist
-            </button>
-            {heroError && (
-              <p className="form-error" id="hero-email-error" role="alert">
-                {heroError}
-              </p>
-            )}
-          </form>
-          <p className="hero-caption">Early access is now open.</p>
-        </div>
-
-        <div className="hero-proof">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            className="hero-mockup"
-            src="/images/mockup-home-angled.png"
-            alt="Three Quill home screens showing notes, stats and voice entries"
-            width={1534}
-            height={1025}
-            fetchPriority="high"
-          />
-        </div>
+  return <section className="hero shell" aria-labelledby="hero-title">
+    <div className="hero-edition"><p className="eyebrow hero-enter"><span className="status-dot" /> For people who think out loud</p><span className="edition-mark">Voice → Notes → Recall</span></div>
+    <div className="hero-grid">
+      <div className="hero-copy">
+        <h1 className="hero-title hero-enter" id="hero-title">Go off on<br /><em>a tangent.</em></h1>
+        <div className="hero-explanation hero-enter"><CornerDownRight className="hero-margin-mark" size={28} aria-hidden="true" /><div><p className="hero-promise">We’ll keep the thread.</p><p className="hero-sub">Talk it through. Quill finds the key ideas, puts them in order, and makes flashcards for the parts you want to remember.</p></div></div>
+        <div className="hero-form-wrap hero-enter"><WaitlistForm id="hero" /></div>
+        <p className="hero-platforms hero-enter"><span className="status-dot" /> Closed beta · iOS & Android</p>
       </div>
-
-      <figure className="hero-showcase">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/images/heroimgreal.png"
-          alt="Fog drifting over layered pine forest ridgelines"
-          width={1672}
-          height={941}
-          loading="lazy"
-        />
-        <figcaption className="hero-showcase-caption">
-          Quill in the wild. Voice notes, structured notes and recall in one quiet place.
-        </figcaption>
-      </figure>
-    </section>
-  );
+      <HeroThought />
+    </div>
+    <div className="hero-bottom"><a className="discover" href="#product"><ArrowDown size={16} aria-hidden="true" /> Follow a thought through Quill</a><p>Say it messy. <span>Keep it clear.</span></p><a className="hero-detail-link" href="#recall">Built to come back to <ArrowUpRight size={16} aria-hidden="true" /></a></div>
+  </section>;
 }

@@ -7,6 +7,7 @@ node_modules/
 
 # Next.js build output
 .next/
+.next-production/
 out/
 build/
 
@@ -19,3 +20,10 @@ next-env.d.ts
 Thumbs.db
 *.log
 logo - Copy.png
+
+.data/
+
+# Keep local captures, reports, recordings and QA signup entries off GitHub.
+# Small written review documents remain part of the project.
+artifacts/*
+!artifacts/*.md

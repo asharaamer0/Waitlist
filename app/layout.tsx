@@ -1,10 +1,19 @@
 import type { Metadata } from "next";
+import localFont from "next/font/local";
 import "./globals.css";
+
+const display = localFont({
+  src: [
+    { path: "./fonts/playfair-roman.woff2", weight: "400 900", style: "normal" },
+    { path: "./fonts/playfair-italic.woff2", weight: "400 900", style: "italic" },
+  ], variable: "--font-playfair", display: "swap",
+});
+const body = localFont({ src: "./fonts/dm-sans.woff2", weight: "100 1000", variable: "--font-dm", display: "swap" });
 
 // Production domain — override with NEXT_PUBLIC_SITE_URL if needed.
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://quill.asharaamer.dev";
 
-const TITLE = "Quill — The note that writes itself from your voice";
+const TITLE = "Quill | Turn your voice into clear notes";
 const DESCRIPTION =
   "Quill is a mobile AI note-taking app. Speak freely and Quill titles, structures and remembers, turning minutes of rambling into a clean note with flashcards. Join the waitlist for early access.";
 
@@ -47,10 +56,10 @@ export const metadata: Metadata = {
     url: "/",
     images: [
       {
-        url: "/images/heroimgreal.png",
-        width: 1672,
-        height: 941,
-        alt: "Fog drifting over layered pine forest ridgelines",
+        url: "/opengraph.png",
+        width: 1200,
+        height: 630,
+        alt: "Quill: the note that writes itself from your voice, with real app screens",
       },
     ],
   },
@@ -58,10 +67,10 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: TITLE,
     description: DESCRIPTION,
-    images: ["/images/heroimgreal.png"],
+    images: ["/opengraph.png"],
   },
   icons: {
-    icon: "/logo.png",
+    icon: "/icon.png",
   },
 };
 
@@ -93,15 +102,8 @@ const JSON_LD = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${display.variable} ${body.variable}`}>
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        {/* Gorestka is not on Google Fonts — DM Sans is the geometric fallback (see globals.css). */}
-        <link
-          href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,500;1,600&display=swap"
-          rel="stylesheet"
-        />
         <meta name="theme-color" content="#D9D9D9" />
         <script
           type="application/ld+json"

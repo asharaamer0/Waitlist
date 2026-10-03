@@ -1,0 +1,40 @@
+import { webkit, expect } from "@playwright/test";
+import { mkdir, writeFile } from "node:fs/promises";
+const base = process.env.BASE_URL || "http://localhost:3100";
+const dir = "artifacts/qa/webkit";
+await mkdir(dir, { recursive: true });
+const browser = await webkit.launch({ headless: true });
+const results = [];
+for (const width of [320, 375, 768, 1440]) {
+  const context = await browser.newContext({ viewport: { width, height: 900 }, deviceScaleFactor: 1, isMobile: width <= 768, reducedMotion: "reduce" });
+  const page = await context.newPage(); const errors = [];
+  page.on("pageerror", error => errors.push(error.message));
+  await page.goto(base, { waitUntil: "networkidle" }); await page.evaluate(() => document.fonts.ready);
+  const documentWidth = await page.evaluate(() => document.documentElement.scrollWidth);
+  expect(documentWidth).toBe(width);
+  await page.screenshot({ path: dir + "/hero-" + width + ".png" });
+  const input = page.locator("#final-email"); const form = page.getByRole('form', { name: 'Join the Quill waitlist', exact: true });
+  const consent = form.getByRole('checkbox', { name: /^I agree/ });
+  await form.getByLabel('Full name').fill('WebKit Tester');
+  await form.getByRole('checkbox', { name: 'Student', exact: true }).check();
+  await consent.check();
+  expect(await consent.evaluate(el => getComputedStyle(el, "::before").borderTopStyle)).toBe("solid");
+  await page.screenshot({ path: dir + "/consent-" + width + ".png" });
+  await input.fill("webkit-" + width + "-" + Date.now() + "@example.test"); await form.locator('.full-submit').click();
+  await expect(form.locator('.full-submit')).toContainText("You’re on the list");
+  await expect(page.locator('.success-message[role="status"]')).toHaveCount(1);
+  await page.locator("#step-1").focus(); await page.keyboard.press("ArrowRight");
+  await expect(page.locator("#step-2")).toBeFocused();
+  await expect(page.locator(".phone-review")).toBeVisible();
+  const card = page.locator(".phone-flashcard"); await card.click(); await expect(card).toContainText("Thursday.");
+  await page.locator(".phone-stage").scrollIntoViewIfNeeded();
+  await page.screenshot({ path: dir + "/product-" + width + ".png" });
+  const undersized = await page.evaluate(() => [...document.querySelectorAll("a,button,input[type=checkbox],input[type=radio]")].filter(el => {
+    const r = el.getBoundingClientRect(); return r.width > 0 && r.height > 0 && (r.width < 44 || r.height < 44);
+  }).map(el => el.textContent.trim()));
+  expect(undersized).toEqual([]);
+  expect(errors).toEqual([]);
+  results.push({ width, documentWidth, undersized, errors, signup: "pass", keyboardTabs: "pass", flashcard: "pass", singleAnnouncement: "pass" });
+  await context.close();
+}
+await browser.close(); await writeFile(dir + "/results.json", JSON.stringify(results,null,2)); console.log(JSON.stringify(results,null,2));

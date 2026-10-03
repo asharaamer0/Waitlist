@@ -1,0 +1,18 @@
+import { chromium, expect } from "@playwright/test";
+import { mkdir, writeFile } from "node:fs/promises";
+const base = process.env.BASE_URL || "http://localhost:3101";
+await mkdir("artifacts/qa", { recursive: true });
+const browser = await chromium.launch({ channel: "chrome", headless: true });
+const page = await browser.newPage({ viewport: { width: 375, height: 812 } });
+await page.goto(base, { waitUntil: "networkidle" });
+await expect(page.locator(".demo-banner")).toHaveCount(0);
+const response = await page.request.post(base + "/api/waitlist", { data: { email: "unconfigured@example.test", name: 'Config Tester', who: ['Student'], consent: true } });
+expect(response.status()).toBe(503);
+const input = page.locator("#final-email"); const form = page.getByRole('form', { name: 'Join the Quill waitlist', exact: true });
+await form.getByLabel('Full name').fill('Config Tester'); await form.getByRole('checkbox', { name: 'Student', exact: true }).check();
+await input.fill("unconfigured@example.test"); await form.getByRole("checkbox", { name: /^I agree/ }).check();
+await form.locator('.full-submit').click(); await expect(page.locator("#final-feedback")).toContainText("Signups aren’t open on this server yet");
+await expect(input).toHaveValue("unconfigured@example.test"); await expect(form.locator('.full-submit')).toBeEnabled();
+await page.screenshot({ path: "artifacts/qa/unconfigured-error.png" });
+await writeFile("artifacts/qa/unconfigured.json", JSON.stringify({ status: response.status(), inputPreserved: true, retryEnabled: true, externalWrites: false },null,2));
+await browser.close(); console.log("Actual unconfigured endpoint: 503, preserved input, retry enabled. No external writes.");

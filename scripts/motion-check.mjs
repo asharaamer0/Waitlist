@@ -1,0 +1,45 @@
+import { chromium, expect } from "@playwright/test";
+import { mkdir, writeFile } from "node:fs/promises";
+const dir = "artifacts/qa"; await mkdir(dir, { recursive: true });
+const browser = await chromium.launch({ channel: "chrome", headless: true });
+const context = await browser.newContext({ viewport: { width: 1440, height: 1000 }, recordVideo: { dir, size: { width: 1440, height: 1000 } } });
+const page = await context.newPage(); const base = process.env.BASE_URL || "http://localhost:3100";
+await page.goto(base, { waitUntil: "networkidle" });
+await page.waitForTimeout(1100);
+const before = await page.locator(".product-phone").evaluate(el => getComputedStyle(el).transform);
+await page.locator(".product-stage").scrollIntoViewIfNeeded(); await page.waitForTimeout(800);
+const after = await page.locator(".product-phone").evaluate(el => getComputedStyle(el).transform);
+expect(before).not.toBe(after);
+await page.screenshot({ path: dir + "/scroll-reveal.png" });
+const frames = await page.evaluate(async () => {
+  const times = []; let last; const initial = scrollY;
+  for (let i = 0; i < 150; i++) {
+    const time = await new Promise(resolve => requestAnimationFrame(resolve));
+    if (last !== undefined) times.push(time - last); last = time;
+    scrollTo(0, initial + i * 2);
+  }
+  return times;
+});
+const sorted = [...frames].sort((a,b) => a-b);
+const metrics = { sampleFrames: frames.length, averageFps: 1000 / (frames.reduce((a,b) => a+b,0) / frames.length), p95FrameMs: sorted[Math.floor(sorted.length * .95)], longestFrameMs: sorted.at(-1), scrollTransformBefore: before, scrollTransformAfter: after };
+await page.locator("#step-0").click(); await expect(page.locator(".recording-screen")).toBeVisible(); await page.waitForTimeout(300);
+await page.screenshot({ path: dir + "/recording-desktop.png" });
+await page.locator("#step-2").click(); await expect(page.locator(".phone-review")).toBeVisible(); await page.waitForTimeout(300);
+await page.screenshot({ path: dir + "/review-desktop.png" });
+await page.emulateMedia({ reducedMotion: "reduce" }); await page.waitForTimeout(100);
+expect(await page.locator(".product-phone").evaluate(el => getComputedStyle(el).transform)).toBe("none");
+expect(await page.evaluate(() => document.documentElement.classList.contains("lenis"))).toBe(false);
+await page.goto(base + "/privacy", { waitUntil: "networkidle" });
+await page.locator(".nav-join").click();
+await expect(page).toHaveURL(/#waitlist$/);
+await expect(page.locator("#waitlist-title")).toBeInViewport();
+metrics.privacyCtaToFullForm = true;
+await page.setViewportSize({ width: 320, height: 812 }); await page.goto(base, { waitUntil: "networkidle" });
+const card = page.locator(".recall-card"); await card.scrollIntoViewIfNeeded();
+const questionHeight = await card.evaluate(el => el.getBoundingClientRect().height);
+await card.click(); const answerHeight = await card.evaluate(el => el.getBoundingClientRect().height);
+expect(answerHeight).toBe(questionHeight);
+metrics.recallHeights320 = { question: questionHeight, answer: answerHeight };
+await page.screenshot({ path: dir + "/recall-answer-320.png" });
+await context.close(); await browser.close();
+await writeFile(dir + "/motion.json", JSON.stringify(metrics,null,2)); console.log(JSON.stringify(metrics,null,2));

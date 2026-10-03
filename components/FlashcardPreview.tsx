@@ -1,140 +1,28 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
-import { Layers, RotateCw } from "lucide-react";
-
-const cards = [
-  {
-    q: "What were the three main themes from the product roadmap discussion?",
-    a: ["1. Search architecture overhaul", "2. Onboarding friction at step 3", "3. Q4 roadmap structure and review cadence"],
-    note: "Product roadmap discussion",
-  },
-  {
-    q: "What is the search latency target from the planning session?",
-    a: ["Under 200ms", "Reviewed positively in the new IA proposal"],
-    note: "Weekly planning session",
-  },
-  {
-    q: "When is the export draft due?",
-    a: ["Thursday", "Part of the weekly reflection workflow"],
-    note: "Weekly planning session",
-  },
-];
-
-const ADVANCE_MS = 8000;
+import { useState } from "react";
+import { motion, useReducedMotion } from "framer-motion";
+import { ArrowRight, RotateCcw } from "lucide-react";
 
 export function FlashcardPreview() {
-  const [index, setIndex] = useState(0);
-  const [flipped, setFlipped] = useState(false);
-  const [paused, setPaused] = useState(false);
-  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  useEffect(() => {
-    if (paused) return;
-    timer.current = setTimeout(() => {
-      setFlipped(false);
-      setIndex((i) => (i + 1) % cards.length);
-    }, ADVANCE_MS);
-    return () => {
-      if (timer.current) clearTimeout(timer.current);
-    };
-  }, [index, flipped, paused]);
-
-  const card = cards[index];
-
-  const flip = () => {
-    if (timer.current) clearTimeout(timer.current);
-    setFlipped((f) => !f);
-  };
-
-  return (
-    <section className="page-section flashcard-section" aria-labelledby="flashcard-title">
-      <div className="section-inner flashcard-layout">
-        <motion.div
-          className="flashcard-copy"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-        >
-          <span className="section-label">
-            <Layers className="section-label-icon" aria-hidden="true" /> Built-in recall
-          </span>
-          <h2 className="flashcard-heading" id="flashcard-title">
-            Quill builds your deck as you go.
-          </h2>
-          <p className="flashcard-sub">
-            Every note becomes a question. No separate study step — it just happens.
-          </p>
-          {/* IMAGE NEEDED: Notes List / Home screen — 280×560px — left column on desktop, flashcard on the right */}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/images/mockup-home-angled.png"
-            alt="Quill home screen showing the notes list on three phones"
-            width={1534}
-            height={1025}
-            loading="lazy"
-          />
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-60px" }}
-          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-        >
-          <div
-            className={`flashcard-scene${flipped ? " flipped" : ""}`}
-            tabIndex={0}
-            role="button"
-            aria-label={`Flashcard ${index + 1} of ${cards.length}: ${flipped ? "showing answer" : "showing question"}. Activate to flip.`}
-            onClick={flip}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" || e.key === " ") {
-                e.preventDefault();
-                flip();
-              }
-            }}
-            onMouseEnter={() => setPaused(true)}
-            onMouseLeave={() => setPaused(false)}
-            onFocus={() => setPaused(true)}
-            onBlur={() => setPaused(false)}
-          >
-            <div className="flashcard-inner">
-              <div className="flashcard-face">
-                <small>
-                  Question · {index + 1} / {cards.length}
-                </small>
-                <p className="flashcard-question">{card.q}</p>
-                <span className="flashcard-tap">Tap to reveal answer</span>
-              </div>
-              <div className="flashcard-face flashcard-back">
-                <small>
-                  Answer · {index + 1} / {cards.length}
-                </small>
-                <ul className="flashcard-answer">
-                  {card.a.map((line) => (
-                    <li key={line}>{line}</li>
-                  ))}
-                </ul>
-                <span className="flashcard-note">Note: {card.note}</span>
-              </div>
-            </div>
-          </div>
-          <p className="flashcard-hint" aria-hidden="true">
-            <RotateCw /> Tap to flip · auto-advances every 8 seconds
-          </p>
-          <div className="flashcard-dots" aria-hidden="true">
-            {cards.map((_, i) => (
-              <span key={i} className={i === index ? "active" : ""} />
-            ))}
-          </div>
-          <p className="sr-only" aria-live="polite">
-            Card {index + 1} of {cards.length}: {flipped ? card.a.join(" ") : card.q}
-          </p>
-        </motion.div>
-      </div>
-    </section>
-  );
+  const [answer, setAnswer] = useState(false);
+  const [keyboard, setKeyboard] = useState(false);
+  const reduced = useReducedMotion();
+  return <section className="recall-section shell" id="recall" aria-labelledby="recall-title">
+    <div className="recall-art">
+      <div className="source-note"><span className="eyebrow">From your PDF</span><h3>Thinking, Fast<br />and Slow</h3><p>Two ways we think.<br />One automatic, one deliberate.</p><span className="source-page">Book notes · 4 pages</span></div>
+      <button className="recall-card" onClick={() => setAnswer(!answer)} onPointerDown={() => setKeyboard(false)} onKeyDown={() => setKeyboard(true)} aria-pressed={answer}>
+        <span className="recall-card-top"><span>{answer ? "The answer" : "A question for you"}</span><span>01 / 03</span></span>
+        <motion.span className="recall-question" key={String(answer)} initial={{ opacity: reduced || keyboard ? 1 : 0, transform: reduced || keyboard ? "none" : "translateY(5px)" }} animate={{ opacity: 1, transform: "translateY(0)" }} transition={{ duration: reduced || keyboard ? 0 : 0.2, ease: [0.23, 1, 0.32, 1] }}>{answer ? "System 1 is fast and intuitive. System 2 is slow and deliberate." : "How do System 1 and System 2 differ?"}</motion.span>
+        <span className="recall-card-bottom"><span>{answer ? "Back to the question" : "Tap to find out"}</span>{answer ? <RotateCcw size={18} aria-hidden="true" /> : <ArrowRight size={18} aria-hidden="true" />}</span>
+      </button>
+      <p className="recall-art-caption">Illustrative preview · tap the card to try it.</p>
+    </div>
+    <div className="recall-copy">
+      <p className="eyebrow"><span className="section-number">02 /</span> Built-in recall</p>
+      <h2 id="recall-title">Don’t just save it.<br /><em>Keep it with you.</em></h2>
+      <p>That paper you read. That lecture you recorded. Quill turns the key ideas into flashcards, so the useful bits stay with you.</p>
+      <a className="text-link" href="#waitlist">Make room for what matters <ArrowRight size={17} aria-hidden="true" /></a>
+    </div>
+  </section>;
 }
